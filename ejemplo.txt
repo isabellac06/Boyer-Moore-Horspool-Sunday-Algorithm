@@ -1,0 +1,3 @@
+Un perro y un gato
+Busca el patron perro: aparece en la frase de arriba, en perros, en perrito y en la palabra perro al final de esta linea perro
+	Linea con tabulador y un perro grande
