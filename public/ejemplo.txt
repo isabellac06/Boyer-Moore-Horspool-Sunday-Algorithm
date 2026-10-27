@@ -1,0 +1,3 @@
+ONCE CODE RUNS
+El CODE se lee como un texto: CODE, DECODE y ENCODE contienen CODE.
+	Linea con tabulador y CODE al final CODE
