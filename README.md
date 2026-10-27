@@ -2,7 +2,7 @@
 
 Aplicación web hecha con **React + JavaScript (Vite)** que implementa el algoritmo de búsqueda de patrones **Boyer-Moore-Horspool-Sunday** (Quick Search, D. M. Sunday, 1990).
 
-**Integrantes:** Isabella Cobos Lizarazo · Jason Andrés Vázquez
+**Integrantes:** Isabella Cobos Lizarazo · Jason Andrés Vásquez Ramirez
 
 ## Qué hace
 

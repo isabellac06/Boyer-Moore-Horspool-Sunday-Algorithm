@@ -24,9 +24,14 @@ export default function TextoResaltado({ texto, patron, posiciones, onVerPosicio
   return (
     <section className="tarjeta">
       <div className="tarjeta-titulo">
-        <h2>Texto con las coincidencias</h2>
+        <h2>Resultado: dónde se encontró el patrón</h2>
         <span className="pista">Toca una posición para verla en el simulador</span>
       </div>
+
+      <p className="detalle">
+        Cada círculo verde es una posición del texto donde empieza una aparición del patrón (se cuenta desde 0). Abajo
+        se ve el texto completo con esas apariciones resaltadas en amarillo.
+      </p>
 
       <div className="posiciones">
         {posiciones.length === 0 && <span className="detalle">El patrón no aparece en el texto.</span>}

@@ -9,14 +9,17 @@ import Tablero from './components/Tablero.jsx'
 import Explicacion from './components/Explicacion.jsx'
 import TablaSaltos from './components/TablaSaltos.jsx'
 import TextoResaltado from './components/TextoResaltado.jsx'
+import Glosario from './components/Glosario.jsx'
+import logoUfps from './utils/img/ufpsLogo.png'
 
-const TEXTO_EJEMPLO = 'ONCE CODE RUNS'
-const PATRON_EJEMPLO = 'CODE'
+// Ejemplo corto (cabe en pantalla): en 4 intentos se ven saltos de 2, 1 y 6, y una coincidencia.
+const TEXTO_EJEMPLO = 'Un perro y un gato'
+const PATRON_EJEMPLO = 'perro'
 
 export default function App() {
   // ---------- Estado ----------
   const [texto, setTexto] = useState(TEXTO_EJEMPLO)
-  const [nombreArchivo, setNombreArchivo] = useState('ejemplo.txt')
+  const [nombreArchivo, setNombreArchivo] = useState(null) // null = texto escrito a mano
   const [patron, setPatron] = useState(PATRON_EJEMPLO)
   const [pasoActual, setPasoActual] = useState(0)
   const [reproduciendo, setReproduciendo] = useState(false)
@@ -59,7 +62,7 @@ export default function App() {
   // ---------- Atajos de teclado: flechas izquierda y derecha ----------
   useEffect(() => {
     const alPresionar = (e) => {
-      if (e.target.tagName === 'INPUT') return
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return
       if (e.key === 'ArrowRight') irA(pasoActual + 1)
       if (e.key === 'ArrowLeft') irA(pasoActual - 1)
     }
@@ -89,35 +92,44 @@ export default function App() {
     }
   }
 
+  // El usuario escribe o pega el texto directamente: ya no viene de un archivo
+  function escribirTexto(nuevoTexto) {
+    setTexto(nuevoTexto)
+    setNombreArchivo(null)
+    setMensaje(null)
+  }
+
   function usarEjemplo() {
     setTexto(TEXTO_EJEMPLO)
-    setNombreArchivo('ejemplo.txt')
+    setNombreArchivo(null)
     setPatron(PATRON_EJEMPLO)
     setMensaje(null)
   }
 
   function descargarPDF() {
-    generarPDF({ texto, patron, posiciones: resultado.posiciones, nombreArchivo })
+    generarPDF({ texto, patron, posiciones: resultado.posiciones, nombreArchivo: nombreArchivo ?? 'texto-escrito.txt' })
   }
 
   // ---------- Vista ----------
   return (
     <div className="pagina">
       <header className="encabezado">
+        <img className="logo-ufps" src={logoUfps} alt="Universidad Francisco de Paula Santander" />
         <span className="etiqueta">Algoritmo de búsqueda de patrones · Quick Search, 1990</span>
         <h1>
           Boyer-Moore-Horspool-<em>Sunday</em>
         </h1>
         <p>
           Busca un patrón dentro de un texto saltando según el carácter que está justo después de la ventana,{' '}
-          <code>T[i + m]</code>. Abre un archivo, escribe un patrón y sigue el algoritmo paso a paso.
+          <code>T[i + m]</code>. Escribe un texto (o abre un archivo), escribe un patrón y sigue el algoritmo paso a paso.
         </p>
       </header>
 
       <PanelDatos
+        texto={texto}
         nombreArchivo={nombreArchivo}
-        largoTexto={texto.length}
         patron={patron}
+        onTexto={escribirTexto}
         onPatron={setPatron}
         onArchivo={abrirArchivo}
         onEjemplo={usarEjemplo}
@@ -166,8 +178,10 @@ export default function App() {
       )}
 
       <footer className="pie">
-        Proyecto de Estructuras de Datos · Isabella Cobos Lizarazo y Jason Andrés Vázquez
+        Análisis de algoritmos · Isabella Cobos Lizarazo y Jason Andrés Vásquez Ramirez
       </footer>
+
+      <Glosario />
     </div>
   )
 }

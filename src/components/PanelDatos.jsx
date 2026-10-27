@@ -1,14 +1,25 @@
 import { useRef } from 'react'
 
-/** Escoger el archivo .txt, escribir el patrón y descargar el PDF. */
-export default function PanelDatos({ nombreArchivo, largoTexto, patron, onPatron, onArchivo, onEjemplo, onPDF, puedePDF }) {
+/** Escribir (o cargar desde un .txt) el texto, escribir el patrón y descargar el PDF. */
+export default function PanelDatos({ texto, nombreArchivo, patron, onTexto, onPatron, onArchivo, onEjemplo, onPDF, puedePDF }) {
   const selectorArchivo = useRef(null)
 
   return (
     <section className="tarjeta panel-datos">
-      <div className="campo">
-        <span className="etiqueta">1 · Archivo de texto</span>
-        <div className="fila">
+      <div className="campo campo-texto">
+        <label className="etiqueta" htmlFor="texto">
+          1 · Texto donde buscar
+        </label>
+        <textarea
+          id="texto"
+          className="entrada-texto"
+          value={texto}
+          onChange={(e) => onTexto(e.target.value)}
+          placeholder="Escribe o pega aquí tu texto…"
+          rows={3}
+          spellCheck={false}
+        />
+        <div className="fila fila-texto">
           <button className="boton" onClick={() => selectorArchivo.current.click()}>
             Abrir archivo .txt
           </button>
@@ -25,10 +36,10 @@ export default function PanelDatos({ nombreArchivo, largoTexto, patron, onPatron
           <button className="boton suave" onClick={onEjemplo}>
             Usar ejemplo
           </button>
+          <span className="detalle">
+            {nombreArchivo ? `Archivo: ${nombreArchivo}` : 'Texto escrito'} · {texto.length.toLocaleString()} caracteres
+          </span>
         </div>
-        <span className="detalle">
-          {nombreArchivo} · {largoTexto.toLocaleString()} caracteres
-        </span>
       </div>
 
       <div className="campo">
