@@ -101,6 +101,7 @@ header.encabezado code { background: rgba(255, 255, 255, 0.2); padding: 1px 6px;
 .dos-columnas { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 16px; }
 @media (max-width: 760px) { .dos-columnas { grid-template-columns: 1fr; } }
 
+.pie p { margin: 2px 0; }
 .pie { text-align: center; color: var(--gris); font-size: 0.85rem; border-top: 2px solid var(--ufps); padding-top: 14px; }
 
 /* ============ Botones y campos ============ */

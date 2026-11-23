@@ -1,14 +1,36 @@
 import { useRef } from 'react'
 
-/** Escribir (o cargar desde un .txt) el texto, escribir el patrón y descargar el PDF. */
-export default function PanelDatos({ texto, nombreArchivo, patron, onTexto, onPatron, onArchivo, onEjemplo, onPDF, puedePDF }) {
+/** Patrón a buscar: va arriba para ver el simulador de inmediato. */
+export function PanelPatron({ patron, onPatron }) {
+  return (
+    <section className="tarjeta panel-datos">
+      <div className="campo">
+        <label className="etiqueta" htmlFor="patron">
+          Patrón a buscar
+        </label>
+        <input
+          id="patron"
+          className="entrada-patron"
+          value={patron}
+          onChange={(e) => onPatron(e.target.value)}
+          placeholder="Escribe el patrón"
+          spellCheck={false}
+        />
+        <span className="detalle">La búsqueda se actualiza mientras escribes</span>
+      </div>
+    </section>
+  )
+}
+
+/** Texto (escrito o desde un .txt) y descarga del PDF: va debajo del simulador. */
+export function PanelTexto({ texto, nombreArchivo, onTexto, onArchivo, onEjemplo, onPDF, puedePDF }) {
   const selectorArchivo = useRef(null)
 
   return (
     <section className="tarjeta panel-datos">
       <div className="campo campo-texto">
         <label className="etiqueta" htmlFor="texto">
-          1 · Texto donde buscar
+          Texto donde buscar
         </label>
         <textarea
           id="texto"
@@ -43,22 +65,7 @@ export default function PanelDatos({ texto, nombreArchivo, patron, onTexto, onPa
       </div>
 
       <div className="campo">
-        <label className="etiqueta" htmlFor="patron">
-          2 · Patrón a buscar
-        </label>
-        <input
-          id="patron"
-          className="entrada-patron"
-          value={patron}
-          onChange={(e) => onPatron(e.target.value)}
-          placeholder="Escribe el patrón"
-          spellCheck={false}
-        />
-        <span className="detalle">La búsqueda se actualiza mientras escribes</span>
-      </div>
-
-      <div className="campo">
-        <span className="etiqueta">3 · Resultado en PDF</span>
+        <span className="etiqueta">Resultado en PDF</span>
         <button className="boton principal" onClick={onPDF} disabled={!puedePDF}>
           Descargar PDF resaltado
         </button>

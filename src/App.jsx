@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { BoyerMooreHorspoolSunday } from './algoritmo/BoyerMooreHorspoolSunday.js'
 import { leerArchivo, contarNoAscii } from './utils/archivoTexto.js'
 import { generarPDF } from './utils/generadorPDF.js'
-import PanelDatos from './components/PanelDatos.jsx'
+import { PanelPatron, PanelTexto } from './components/PanelDatos.jsx'
 import Estadisticas from './components/Estadisticas.jsx'
 import Controles from './components/Controles.jsx'
 import Tablero from './components/Tablero.jsx'
@@ -12,9 +12,9 @@ import TextoResaltado from './components/TextoResaltado.jsx'
 import Glosario from './components/Glosario.jsx'
 import logoUfps from './utils/img/ufpsLogo.png'
 
-// Ejemplo corto (cabe en pantalla): en 4 intentos se ven saltos de 2, 1 y 6, y una coincidencia.
+// Ejemplo corto que cabe en pantalla.
 const TEXTO_EJEMPLO = 'Un perro y un gato'
-const PATRON_EJEMPLO = 'perro'
+const PATRON_EJEMPLO = 'gato'
 
 export default function App() {
   // ---------- Estado ----------
@@ -125,25 +125,13 @@ export default function App() {
         </p>
       </header>
 
-      <PanelDatos
-        texto={texto}
-        nombreArchivo={nombreArchivo}
-        patron={patron}
-        onTexto={escribirTexto}
-        onPatron={setPatron}
-        onArchivo={abrirArchivo}
-        onEjemplo={usarEjemplo}
-        onPDF={descargarPDF}
-        puedePDF={Boolean(resultado)}
-      />
+      <PanelPatron patron={patron} onPatron={setPatron} />
 
       {mensaje && <div className={`mensaje ${mensaje.tipo}`}>{mensaje.texto}</div>}
       {problema && <div className="mensaje error">{problema}</div>}
 
       {resultado && (
         <>
-          <Estadisticas resultado={resultado} n={texto.length} m={patron.length} />
-
           <section className="tarjeta">
             <div className="tarjeta-titulo">
               <h2>Simulador paso a paso</h2>
@@ -174,11 +162,27 @@ export default function App() {
             posiciones={resultado.posiciones}
             onVerPosicion={(pos) => irA(resultado.pasos.findIndex((p) => p.inicio === pos))}
           />
+
+          <Estadisticas resultado={resultado} n={texto.length} m={patron.length} />
         </>
       )}
 
+      <PanelTexto
+        texto={texto}
+        nombreArchivo={nombreArchivo}
+        onTexto={escribirTexto}
+        onArchivo={abrirArchivo}
+        onEjemplo={usarEjemplo}
+        onPDF={descargarPDF}
+        puedePDF={Boolean(resultado)}
+      />
+
       <footer className="pie">
-        Análisis de algoritmos · Isabella Cobos Lizarazo y Jason Andrés Vásquez Ramirez
+        <p>Isabella Cobos Lizarazo · isabellacl@ufps.edu.co</p>
+        <p>Jason Andrés Vásquez Ramirez · jasonandresvr@ufps.edu.co</p>
+        <p>Análisis de Algoritmos · Ingeniería de Sistemas</p>
+        <p>Universidad Francisco de Paula Santander, sede Cúcuta · Cúcuta, Norte de Santander, Colombia</p>
+        <p>Profesor: Marco Antonio Adarme Jaimes · 26 de octubre de 2026</p>
       </footer>
 
       <Glosario />
