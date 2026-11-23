@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { BoyerMooreHorspoolSunday } from './algoritmo/BoyerMooreHorspoolSunday.js'
 import { leerArchivo, contarNoAscii } from './utils/archivoTexto.js'
 import { generarPDF } from './utils/generadorPDF.js'
-import { PanelPatron, PanelTexto } from './components/PanelDatos.jsx'
+import PanelDatos from './components/PanelDatos.jsx'
 import Estadisticas from './components/Estadisticas.jsx'
 import Controles from './components/Controles.jsx'
 import Tablero from './components/Tablero.jsx'
@@ -125,57 +125,63 @@ export default function App() {
         </p>
       </header>
 
-      <PanelPatron patron={patron} onPatron={setPatron} />
+      <div className="con-lateral">
+        <main className="contenido">
+          {mensaje && <div className={`mensaje ${mensaje.tipo}`}>{mensaje.texto}</div>}
+          {problema && <div className="mensaje error">{problema}</div>}
 
-      {mensaje && <div className={`mensaje ${mensaje.tipo}`}>{mensaje.texto}</div>}
-      {problema && <div className="mensaje error">{problema}</div>}
+          {resultado && (
+            <>
+              <section className="tarjeta">
+                <div className="tarjeta-titulo">
+                  <h2>Simulador paso a paso</h2>
+                  <span className="pista">Usa las flechas ← → del teclado</span>
+                </div>
+                <Controles
+                  pasoActual={pasoActual}
+                  total={totalPasos}
+                  reproduciendo={reproduciendo}
+                  velocidad={velocidad}
+                  onIrA={irA}
+                  onReproducir={() => {
+                    if (pasoActual >= totalPasos - 1) setPasoActual(0)
+                    setReproduciendo(!reproduciendo)
+                  }}
+                  onVelocidad={setVelocidad}
+                />
+                <Tablero texto={texto} patron={patron} paso={paso} />
+                <div className="dos-columnas">
+                  <Explicacion paso={paso} patron={patron} texto={texto} resultado={resultado} />
+                  <TablaSaltos algoritmo={algoritmo} caracterUsado={paso.siguiente} />
+                </div>
+              </section>
 
-      {resultado && (
-        <>
-          <section className="tarjeta">
-            <div className="tarjeta-titulo">
-              <h2>Simulador paso a paso</h2>
-              <span className="pista">Usa las flechas ← → del teclado</span>
-            </div>
-            <Controles
-              pasoActual={pasoActual}
-              total={totalPasos}
-              reproduciendo={reproduciendo}
-              velocidad={velocidad}
-              onIrA={irA}
-              onReproducir={() => {
-                if (pasoActual >= totalPasos - 1) setPasoActual(0)
-                setReproduciendo(!reproduciendo)
-              }}
-              onVelocidad={setVelocidad}
-            />
-            <Tablero texto={texto} patron={patron} paso={paso} />
-            <div className="dos-columnas">
-              <Explicacion paso={paso} patron={patron} texto={texto} resultado={resultado} />
-              <TablaSaltos algoritmo={algoritmo} caracterUsado={paso.siguiente} />
-            </div>
-          </section>
+              <TextoResaltado
+                texto={texto}
+                patron={patron}
+                posiciones={resultado.posiciones}
+                onVerPosicion={(pos) => irA(resultado.pasos.findIndex((p) => p.inicio === pos))}
+              />
 
-          <TextoResaltado
+              <Estadisticas resultado={resultado} n={texto.length} m={patron.length} />
+            </>
+          )}
+        </main>
+
+        <aside className="lateral">
+          <PanelDatos
             texto={texto}
+            nombreArchivo={nombreArchivo}
             patron={patron}
-            posiciones={resultado.posiciones}
-            onVerPosicion={(pos) => irA(resultado.pasos.findIndex((p) => p.inicio === pos))}
+            onTexto={escribirTexto}
+            onPatron={setPatron}
+            onArchivo={abrirArchivo}
+            onEjemplo={usarEjemplo}
+            onPDF={descargarPDF}
+            puedePDF={Boolean(resultado)}
           />
-
-          <Estadisticas resultado={resultado} n={texto.length} m={patron.length} />
-        </>
-      )}
-
-      <PanelTexto
-        texto={texto}
-        nombreArchivo={nombreArchivo}
-        onTexto={escribirTexto}
-        onArchivo={abrirArchivo}
-        onEjemplo={usarEjemplo}
-        onPDF={descargarPDF}
-        puedePDF={Boolean(resultado)}
-      />
+        </aside>
+      </div>
 
       <footer className="pie">
         <p>Isabella Cobos Lizarazo · isabellacl@ufps.edu.co</p>

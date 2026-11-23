@@ -1,7 +1,9 @@
 import { useRef } from 'react'
 
-/** Patrón a buscar: va arriba para ver el simulador de inmediato. */
-export function PanelPatron({ patron, onPatron }) {
+/** Panel lateral: patrón, texto (escrito o desde un .txt) y descarga del PDF. */
+export default function PanelDatos({ texto, nombreArchivo, patron, onTexto, onPatron, onArchivo, onEjemplo, onPDF, puedePDF }) {
+  const selectorArchivo = useRef(null)
+
   return (
     <section className="tarjeta panel-datos">
       <div className="campo">
@@ -18,17 +20,7 @@ export function PanelPatron({ patron, onPatron }) {
         />
         <span className="detalle">La búsqueda se actualiza mientras escribes</span>
       </div>
-    </section>
-  )
-}
-
-/** Texto (escrito o desde un .txt) y descarga del PDF: va debajo del simulador. */
-export function PanelTexto({ texto, nombreArchivo, onTexto, onArchivo, onEjemplo, onPDF, puedePDF }) {
-  const selectorArchivo = useRef(null)
-
-  return (
-    <section className="tarjeta panel-datos">
-      <div className="campo campo-texto">
+      <div className="campo">
         <label className="etiqueta" htmlFor="texto">
           Texto donde buscar
         </label>
@@ -38,7 +30,7 @@ export function PanelTexto({ texto, nombreArchivo, onTexto, onArchivo, onEjemplo
           value={texto}
           onChange={(e) => onTexto(e.target.value)}
           placeholder="Escribe o pega aquí tu texto…"
-          rows={3}
+          rows={6}
           spellCheck={false}
         />
         <div className="fila fila-texto">
